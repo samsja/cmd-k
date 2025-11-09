@@ -1,6 +1,15 @@
 # cmd-k
 
-A command-line tool that converts natural language prompts into shell commands using OpenAI-compatible APIs.
+**Transform natural language into shell commands with AI**
+
+cmd-k is a command-line tool that converts your natural language descriptions into executable shell commands. Powered by OpenAI-compatible APIs (OpenAI, vLLM, OpenRouter), it helps you quickly find the right command without memorizing syntax.
+
+Instead of searching documentation, just describe what you want to do:
+- "list all files" → `ls -la`
+- "find python files" → `find . -name "*.py"`
+- "remove all node_modules folders" → `find . -name "node_modules" -type d -exec rm -rf {} +`
+
+The command appears pre-filled in your terminal - review it, edit if needed, then press Enter to execute.
 
 ## Installation
 
@@ -57,11 +66,38 @@ model = "openai/gpt-4o-mini"
 
 ## Usage
 
+After installing the shell integration, use `ck` followed by your natural language prompt:
+
 ```bash
+# List files
 ck list all files
-# Output: ls -la
-# The command appears in your terminal - press Enter to execute
+# → ls -la
+
+# Find files
+ck find all python files
+# → find . -name "*.py"
+
+# Git operations
+ck show git status
+# → git status
+
+ck commit all changes with message "update"
+# → git add . && git commit -m "update"
+
+# File operations
+ck count lines in all python files
+# → find . -name "*.py" -exec wc -l {} +
+
+# Process management
+ck show all running node processes
+# → ps aux | grep node
+
+# System info
+ck check disk usage
+# → df -h
 ```
+
+The generated command appears in your terminal input - review it, modify if needed, then press Enter to execute.
 
 ## Development
 

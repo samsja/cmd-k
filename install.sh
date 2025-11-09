@@ -62,7 +62,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
             echo ""
             echo -ne "${MAGENTA}Enter your OpenAI API key: ${NC}"
             read api_key
-            echo -ne "${MAGENTA}Enter model name (default: gpt-4o-mini): ${NC}"
+            echo -ne "${MAGENTA}Enter model name (default: gpt-5-nano-2025-08-07): ${NC}"
             read model
             model=${model:-gpt-4o-mini}
 
@@ -96,7 +96,7 @@ CONFIGEOF
             echo ""
             echo -ne "${MAGENTA}Enter your OpenRouter API key: ${NC}"
             read api_key
-            echo -ne "${MAGENTA}Enter model name (e.g., openai/gpt-4o-mini): ${NC}"
+            echo -ne "${MAGENTA}Enter model name (e.g., openai/gpt-5-nano-2025-08-07): ${NC}"
             read model
 
             cat > "$CONFIG_FILE" << 'CONFIGEOF'

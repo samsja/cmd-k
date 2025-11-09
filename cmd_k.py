@@ -14,7 +14,7 @@ def load_config() -> dict:
     config = {
         "api_key": os.environ.get("OPENAI_API_KEY", ""),
         "base_url": None,
-        "model": "gpt-4o-mini",
+        "model": "gpt-5-nano-2025-08-07",
     }
 
     # Load from config file if it exists
