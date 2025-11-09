@@ -44,35 +44,41 @@ if [ ! -f "$CONFIG_FILE" ]; then
             read -p "Enter model name (default: gpt-4o-mini): " model
             model=${model:-gpt-4o-mini}
 
-            cat > "$CONFIG_FILE" << EOF
+            cat > "$CONFIG_FILE" << 'CONFIGEOF'
 # cmd-k configuration - OpenAI
-api_key = "$api_key"
-model = "$model"
-EOF
+api_key = "API_KEY_PLACEHOLDER"
+model = "MODEL_PLACEHOLDER"
+CONFIGEOF
+            sed -i "s|API_KEY_PLACEHOLDER|$api_key|g" "$CONFIG_FILE"
+            sed -i "s|MODEL_PLACEHOLDER|$model|g" "$CONFIG_FILE"
             ;;
         2)
             # vLLM
             read -p "Enter vLLM base URL (e.g., http://localhost:8000/v1): " base_url
             read -p "Enter model name: " model
 
-            cat > "$CONFIG_FILE" << EOF
+            cat > "$CONFIG_FILE" << 'CONFIGEOF'
 # cmd-k configuration - vLLM
 api_key = "EMPTY"
-base_url = "$base_url"
-model = "$model"
-EOF
+base_url = "BASE_URL_PLACEHOLDER"
+model = "MODEL_PLACEHOLDER"
+CONFIGEOF
+            sed -i "s|BASE_URL_PLACEHOLDER|$base_url|g" "$CONFIG_FILE"
+            sed -i "s|MODEL_PLACEHOLDER|$model|g" "$CONFIG_FILE"
             ;;
         3)
             # OpenRouter
             read -p "Enter your OpenRouter API key: " api_key
             read -p "Enter model name (e.g., openai/gpt-4o-mini): " model
 
-            cat > "$CONFIG_FILE" << EOF
+            cat > "$CONFIG_FILE" << 'CONFIGEOF'
 # cmd-k configuration - OpenRouter
-api_key = "$api_key"
+api_key = "API_KEY_PLACEHOLDER"
 base_url = "https://openrouter.ai/api/v1"
-model = "$model"
-EOF
+model = "MODEL_PLACEHOLDER"
+CONFIGEOF
+            sed -i "s|API_KEY_PLACEHOLDER|$api_key|g" "$CONFIG_FILE"
+            sed -i "s|MODEL_PLACEHOLDER|$model|g" "$CONFIG_FILE"
             ;;
         *)
             echo "Invalid choice. Please run the installer again."
