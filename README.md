@@ -2,6 +2,8 @@
 
 cmd-k converts written instruction into executable shell commands. It's a cursor command that works from the terminal.
 
+![Demo](demo.gif)
+
 examples:
 
 ```bash
