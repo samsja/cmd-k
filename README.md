@@ -1,48 +1,33 @@
 # cmd-k
 
-**Transform natural language into shell commands with AI**
+cmd-k converts written instruction into executable shell commands. It's a cursor command that works from the terminal.
 
-cmd-k is a command-line tool that converts your natural language descriptions into executable shell commands. Powered by OpenAI-compatible APIs (OpenAI, vLLM, OpenRouter), it helps you quickly find the right command without memorizing syntax.
+examples:
 
-Instead of searching documentation, just describe what you want to do:
-- "list all files" → `ls -la`
-- "find python files" → `find . -name "*.py"`
-- "remove all node_modules folders" → `find . -name "node_modules" -type d -exec rm -rf {} +`
+```bash
+# List files
+ck list all files
+# → ls -la
 
-The command appears pre-filled in your terminal - review it, edit if needed, then press Enter to execute.
+# System info
+ck check disk usage
+# → df -h
+```
+
+The command appears pre-filled in your terminal, you just have to press Enter to execute it.
 
 ## Installation
+
+it supports bash and zsh for now.
+
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/samsja/cmd-k/main/install.sh | bash
 ```
 
-Or manually:
 
-```bash
-# Install as a global tool
-uv tool install git+https://github.com/samsja/cmd-k
-
-# Add shell integration (see shells/zsh.sh or shells/bash.sh)
-```
-
-## Configuration
-
-Create `~/.config/cmd-k.toml`:
-
-```toml
-api_key = "your-api-key-here"
-model = "gpt-4o-mini"  # Default model
-# base_url = "https://api.openai.com/v1"  # Optional: for vLLM, OpenRouter, etc.
-```
-
-### Configuration Priority
-
-1. Environment variables (highest priority)
-2. Config file `~/.config/cmd-k.toml`
-3. Defaults (OpenAI with gpt-4o-mini)
-
-### Examples
+<details>
+<summary><b>Extra configuration</b></summary>
 
 **OpenAI (default):**
 ```toml
@@ -64,45 +49,11 @@ base_url = "https://openrouter.ai/api/v1"
 model = "openai/gpt-4o-mini"
 ```
 
-## Usage
+</details>
 
-After installing the shell integration, use `ck` followed by your natural language prompt:
 
-```bash
-# List files
-ck list all files
-# → ls -la
 
-# Find files
-ck find all python files
-# → find . -name "*.py"
+## credits
 
-# Git operations
-ck show git status
-# → git status
-
-ck commit all changes with message "update"
-# → git add . && git commit -m "update"
-
-# File operations
-ck count lines in all python files
-# → find . -name "*.py" -exec wc -l {} +
-
-# Process management
-ck show all running node processes
-# → ps aux | grep node
-
-# System info
-ck check disk usage
-# → df -h
-```
-
-The generated command appears in your terminal input - review it, modify if needed, then press Enter to execute.
-
-## Development
-
-Install [uv](https://github.com/astral-sh/uv) and sync the environment:
-
-```bash
-uv sync
-```
+* cursor command k
+* claude code for auto managing the code. (As of now, november 2025, this is the type of software that AI can manage end to end. Can't wait for the next 6 months of progress)
