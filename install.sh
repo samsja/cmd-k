@@ -2,21 +2,37 @@
 
 set -e
 
-echo "Installing cmd-k from GitHub..."
+# Colors
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+echo ""
+echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}  Installing cmd-k${NC}"
+echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
 
 # Check if uv is installed
 if ! command -v uv &> /dev/null; then
-    echo "Error: uv is not installed. Please install it first:"
-    echo "  curl -LsSf https://astral.sh/uv/install.sh | sh"
+    echo -e "${RED}✗ Error: uv is not installed${NC}"
+    echo ""
+    echo "Please install it first:"
+    echo -e "  ${BOLD}curl -LsSf https://astral.sh/uv/install.sh | sh${NC}"
     exit 1
 fi
 
 # Install cmd-k globally using uv tool
-echo "Installing cmd-k as a global tool..."
+echo -e "${BLUE}→${NC} Installing cmd-k as a global tool..."
 uv tool install git+https://github.com/samsja/cmd-k
 
 echo ""
-echo "✓ cmd-k installed successfully!"
+echo -e "${GREEN}✓ cmd-k installed successfully!${NC}"
 echo ""
 
 # Create config file if it doesn't exist
@@ -24,15 +40,18 @@ CONFIG_DIR="$HOME/.config"
 CONFIG_FILE="$CONFIG_DIR/cmd-k.toml"
 
 if [ ! -f "$CONFIG_FILE" ]; then
-    echo "Setting up configuration..."
+    echo -e "${BOLD}Configuration Setup${NC}"
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
 
     # Ask for provider
     echo "Which API provider do you want to use?"
-    echo "1) OpenAI (default)"
-    echo "2) vLLM"
-    echo "3) OpenRouter"
-    read -p "Choose [1-3] (default: 1): " provider_choice
+    echo -e "  ${CYAN}${BOLD}1)${NC} OpenAI (default)"
+    echo -e "  ${CYAN}${BOLD}2)${NC} vLLM"
+    echo -e "  ${CYAN}${BOLD}3)${NC} OpenRouter"
+    echo ""
+    echo -ne "${MAGENTA}Choose [1-3] (default: 1): ${NC}"
+    read provider_choice
     provider_choice=${provider_choice:-1}
 
     mkdir -p "$CONFIG_DIR"
@@ -40,8 +59,11 @@ if [ ! -f "$CONFIG_FILE" ]; then
     case $provider_choice in
         1)
             # OpenAI
-            read -p "Enter your OpenAI API key: " api_key
-            read -p "Enter model name (default: gpt-4o-mini): " model
+            echo ""
+            echo -ne "${MAGENTA}Enter your OpenAI API key: ${NC}"
+            read api_key
+            echo -ne "${MAGENTA}Enter model name (default: gpt-4o-mini): ${NC}"
+            read model
             model=${model:-gpt-4o-mini}
 
             cat > "$CONFIG_FILE" << 'CONFIGEOF'
@@ -54,8 +76,11 @@ CONFIGEOF
             ;;
         2)
             # vLLM
-            read -p "Enter vLLM base URL (e.g., http://localhost:8000/v1): " base_url
-            read -p "Enter model name: " model
+            echo ""
+            echo -ne "${MAGENTA}Enter vLLM base URL (e.g., http://localhost:8000/v1): ${NC}"
+            read base_url
+            echo -ne "${MAGENTA}Enter model name: ${NC}"
+            read model
 
             cat > "$CONFIG_FILE" << 'CONFIGEOF'
 # cmd-k configuration - vLLM
@@ -68,8 +93,11 @@ CONFIGEOF
             ;;
         3)
             # OpenRouter
-            read -p "Enter your OpenRouter API key: " api_key
-            read -p "Enter model name (e.g., openai/gpt-4o-mini): " model
+            echo ""
+            echo -ne "${MAGENTA}Enter your OpenRouter API key: ${NC}"
+            read api_key
+            echo -ne "${MAGENTA}Enter model name (e.g., openai/gpt-4o-mini): ${NC}"
+            read model
 
             cat > "$CONFIG_FILE" << 'CONFIGEOF'
 # cmd-k configuration - OpenRouter
@@ -87,55 +115,51 @@ CONFIGEOF
     esac
 
     echo ""
-    echo "✓ Config file created at $CONFIG_FILE"
+    echo -e "${GREEN}✓ Config file created at $CONFIG_FILE${NC}"
     echo ""
 else
-    echo "Config file already exists at $CONFIG_FILE"
+    echo -e "${YELLOW}⚠ Config file already exists at $CONFIG_FILE${NC}"
     echo ""
 fi
 
-# Detect the shell
-DETECTED_SHELL=$(basename "$SHELL")
+# Shell integration instructions
+echo -e "${BOLD}Shell Integration${NC}"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+echo "Add the shell integration to your shell config:"
+echo ""
 
-# Define shell integration code
-BASH_INTEGRATION='# cmd-k shell integration for bash
+echo -e "${BOLD}For Bash (~/.bashrc):${NC}"
+echo -e "${BLUE}─────────────────────────────────────────────${NC}"
+echo -e "${YELLOW}${BOLD}cat >> ~/.bashrc << 'EOF'
+# cmd-k shell integration
 ck() {
-    local cmd=$(cmd-k "$@")
-    read -e -p "$ " -i "$cmd" final_cmd
-    if [[ -n "$final_cmd" ]]; then
-        eval "$final_cmd"
+    local cmd=\$(cmd-k \"\$@\")
+    read -e -p \"\$ \" -i \"\$cmd\" final_cmd
+    if [[ -n \"\$final_cmd\" ]]; then
+        eval \"\$final_cmd\"
     fi
-}'
+}
+EOF${NC}"
+echo -e "${BLUE}─────────────────────────────────────────────${NC}"
+echo ""
 
-ZSH_INTEGRATION='# cmd-k shell integration for zsh
+echo -e "${BOLD}For Zsh (~/.zshrc):${NC}"
+echo -e "${BLUE}─────────────────────────────────────────────${NC}"
+echo -e "${YELLOW}${BOLD}cat >> ~/.zshrc << 'EOF'
+# cmd-k shell integration
 ck() {
-    local cmd=$(cmd-k "$@")
-    print -z "$cmd"
-}'
+    local cmd=\$(cmd-k \"\$@\")
+    print -z \"\$cmd\"
+}
+EOF${NC}"
+echo -e "${BLUE}─────────────────────────────────────────────${NC}"
+echo ""
 
-if [ "$DETECTED_SHELL" = "zsh" ]; then
-    RC_FILE="~/.zshrc"
-    SHELL_CODE="$ZSH_INTEGRATION"
-elif [ "$DETECTED_SHELL" = "bash" ]; then
-    RC_FILE="~/.bashrc"
-    SHELL_CODE="$BASH_INTEGRATION"
-else
-    echo "Warning: Could not detect shell type. Showing both examples."
-    echo ""
-    echo "=== For Bash (~/.bashrc) ==="
-    echo "$BASH_INTEGRATION"
-    echo ""
-    echo "=== For Zsh (~/.zshrc) ==="
-    echo "$ZSH_INTEGRATION"
-    exit 0
-fi
-
-echo "Add the following to your $RC_FILE:"
+echo -e "${GREEN}${BOLD}Then reload your shell:${NC}"
+echo -e "  ${YELLOW}${BOLD}source ~/.bashrc${NC}  ${BLUE}# or${NC}  ${YELLOW}${BOLD}source ~/.zshrc${NC}"
 echo ""
-echo "$SHELL_CODE"
+echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${GREEN}✓ Installation complete! Try: ${BOLD}ck list all files${NC}"
+echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
-echo "To add it automatically, run:"
-echo "  echo '$SHELL_CODE' >> $RC_FILE"
-echo ""
-echo "Then reload your shell:"
-echo "  source $RC_FILE"
