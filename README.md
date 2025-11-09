@@ -2,6 +2,21 @@
 
 A command-line tool that converts natural language prompts into shell commands using OpenAI-compatible APIs.
 
+## Installation
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/samsja/cmd-k/main/install.sh | bash
+```
+
+Or manually:
+
+```bash
+# Install as a global tool
+uv tool install git+https://github.com/samsja/cmd-k
+
+# Add shell integration (see shells/zsh.sh or shells/bash.sh)
+```
+
 ## Configuration
 
 Create `~/.config/cmd-k.toml`:
@@ -39,16 +54,6 @@ api_key = "sk-or-..."
 base_url = "https://openrouter.ai/api/v1"
 model = "openai/gpt-4o-mini"
 ```
-
-## Shell Integration
-
-Add this to your `~/.bashrc` or `~/.zshrc`:
-
-```bash
-source /path/to/cmd_k/shell_setup.sh
-```
-
-Works with both bash and zsh.
 
 ## Usage
 
