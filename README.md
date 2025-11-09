@@ -1,22 +1,54 @@
 # cmd-k
 
-A command-line tool that converts natural language prompts into shell commands using OpenAI.
+A command-line tool that converts natural language prompts into shell commands using OpenAI-compatible APIs.
 
-## Setup
+## Configuration
 
-1. Set your OpenAI API key:
+Create `~/.config/cmd-k.toml`:
 
-```bash
-export OPENAI_API_KEY="your-api-key-here"
+```toml
+api_key = "your-api-key-here"
+model = "gpt-4o-mini"  # Default model
+# base_url = "https://api.openai.com/v1"  # Optional: for vLLM, OpenRouter, etc.
 ```
 
-2. Add this to your `~/.bashrc` or `~/.zshrc`:
+### Configuration Priority
+
+1. Environment variables (highest priority)
+2. Config file `~/.config/cmd-k.toml`
+3. Defaults (OpenAI with gpt-4o-mini)
+
+### Examples
+
+**OpenAI (default):**
+```toml
+api_key = "sk-..."
+model = "gpt-4o-mini"
+```
+
+**vLLM:**
+```toml
+api_key = "EMPTY"
+base_url = "http://localhost:8000/v1"
+model = "your-model-name"
+```
+
+**OpenRouter:**
+```toml
+api_key = "sk-or-..."
+base_url = "https://openrouter.ai/api/v1"
+model = "openai/gpt-4o-mini"
+```
+
+## Shell Integration
+
+Add this to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 source /path/to/cmd_k/shell_setup.sh
 ```
 
-This works with both bash and zsh.
+Works with both bash and zsh.
 
 ## Usage
 
